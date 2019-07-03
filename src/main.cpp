@@ -3,7 +3,9 @@
 #include <iostream>
 #include <stdlib.h> 
 #include <unistd.h>
-
+#ifdef WIN32
+#include <time.h>
+#endif
 #include <lsl_cpp.h>
 #include "tools.h"
 
@@ -48,9 +50,14 @@ int main(int argc, char ** argv)
       std::cout << "[INFOS] Now sending data... " << std::endl;  
       for(;;t++)
 	{
+	  int r = 70;
+	  label[3] = abs((t%r - (t/r)%2*(r-1))%r);
+	  //std::cout << label[3] << std::endl;
+	    // (i==abs((m_time%10 - (m_time/10)%2*9)%10))?'o':' ';
+	  
 	  //generate
 	  for(int i = 0; i< sample.size(); i++)
-	    sample[i] = (((t+i)/100)%2)?-0.5:0.5;
+	    sample[i] = label[3]/i+3;//(((t+i)/100)%2)?-0.5:0.5;
 	  
 	  
 
@@ -63,9 +70,9 @@ int main(int argc, char ** argv)
 	      // sample[i] = (sample[i]<0)?0:(sample[i]>1)?1:sample[i];
 	    }
 
-	  //label
-	  for(int i = 0; i< label.size(); i++)
-	    label[i] = 10*sample[i%sample.size()] * sample[(i+1)%sample.size()];
+	  // //label
+	  // for(int i = 0; i< label.size(); i++)
+	  //   label[i] = 10*sample[i%sample.size()] * sample[(i+1)%sample.size()];
 
 	  for(int i = 0; i<label.size(); i++)
 	    {
@@ -75,7 +82,7 @@ int main(int argc, char ** argv)
 	  // send it
 	  outlet_sample.push_sample(sample);		
 	  outlet_label.push_sample(label);
-	  usleep(10000);
+	  usleep(20000);
 	}
 
     }
