@@ -17,23 +17,27 @@ int main(int argc, char ** argv)
 				    {"-ni",
 					"-nl",
 					"-nbi",
-					"-nbl"});
+				     "-nbl",
+				    "-dt"});
   std::vector<std::string> opt_label(
 				     {"Lsl sample stream's name",
 					 "Lsl label stream's name",
 					 "Number of channels of the input",
-					 "Number of channels of the label"});
+				      "Number of channels of the label",
+				     "Delay between sample"});
   std::vector<std::string> opt_value(
 				     {"generator_sample",
 					 "generator_label",
 					 "4",
-					 "15"});
+				      "15",
+				     "20000"});
   get_arg(argc, argv, opt_flag, opt_label, opt_value);
   
   std::string stream_sample_name = opt_value[0];
   std::string stream_label_name = opt_value[1];
   int nb_ch = std::stoi(opt_value[2]);
   int nb_ch_l = std::stoi(opt_value[3]);
+  int dt = std::stoi(opt_value[4]);
 
   int t = 0;
   srand (time(NULL));
@@ -82,7 +86,7 @@ int main(int argc, char ** argv)
 	  // send it
 	  outlet_sample.push_sample(sample);		
 	  outlet_label.push_sample(label);
-	  usleep(20000);
+	  usleep(dt);
 	}
 
     }
